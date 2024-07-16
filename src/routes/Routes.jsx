@@ -5,6 +5,7 @@ import Main from "../layout/Main";
 import Home from "../pages/home/home/Home";
 import Registration from "../pages/authentication/Registration";
 import Login from "../pages/authentication/Login";
+import SendMoney from "../pages/home/pages/SendMoney";
 
 
  export const router = createBrowserRouter([
@@ -15,6 +16,10 @@ import Login from "../pages/authentication/Login";
         {
             path: '/',
             element: <Home></Home>
+        },
+        {
+          path: '/sendmoney',
+          element: <SendMoney></SendMoney>
         }
       ]
     },

@@ -68,6 +68,10 @@ async function run() {
       res.send({ message: 'User logged in successfully' });
     })
 
+    app.get('/info', async(req, res) => {
+      const users = await userInfo.find().toArray();
+      res.send(users);
+    })
 
     
     // Connect the client to the server	(optional starting in v4.7)
