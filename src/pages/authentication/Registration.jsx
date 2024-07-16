@@ -38,6 +38,13 @@ const Registration = () => {
 
         {/* include validation with required or other standard HTML validation rules */}
         <input type="email" {...register("email", { required: true })} placeholder="Email" />
+        <select defaultValue="default" {...register("role", { required: true })}  className=" w-full input input-bordered" >
+            <option   disabled value="user" >
+                select account type
+            </option>
+              <option value="user" >User</option>
+              <option value="agent" >Agent</option>
+            </select>
         {/* errors will return when field validation fails  */}
         {errors.exampleRequired && <span className="text-red-600">This field is required</span>}
 

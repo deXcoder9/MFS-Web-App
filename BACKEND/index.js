@@ -36,28 +36,36 @@ async function run() {
       const { name, pin, mobile, email } = req.body;
       const userExists = await userInfo.findOne({ email });
       if (userExists) {
-        return res.status(400).json({ message: 'User already exists' });
+        return res.status(400).send({ message: 'User already exists' });
       }
       // password hashing
       const passwordHash = await bcrypt.hash(pin, 10);
       console.log(passwordHash)
 
       await userInfo.insertOne({ name, pin: passwordHash, mobile, email });
-      res.json({ message: 'User registered successfully' });
+      res.send({ message: 'User registered successfully' });
     })
 
     // login
-    app.get('/loginverifications', async(req, res) => {
-      const { email, mobile, pin } = req.query;
-      const user = await userInfo.findOne({ email });
+    app.post('/loginverifications', async(req, res) => {
+      const { email, mobile, pin } = req.body;
+      let user;
+      
+      if (email){
+        user = await userInfo.findOne({ email });
+      } else if (mobile) {
+        user = await userInfo.findOne({ mobile });
+      }
+      
+      console.log(user)
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        return res.send({ message: 'User not found' });
       }
       const isMatch = await bcrypt.compare(pin, user.pin);
       if (!isMatch) {
-        return res.status(400).json({ message: 'Invalid PIN' });
+        return res.send({ message: 'Invalid PIN' });
       }
-      res.json({ message: 'User logged in successfully' });
+      res.send({ message: 'User logged in successfully' });
     })
 
 
@@ -73,16 +81,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
-
-
-
-
-
-
-
-
-
 
 
 

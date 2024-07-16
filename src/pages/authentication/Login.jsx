@@ -21,13 +21,20 @@ const Login = () => {
                 pin
             }
             console.log(formData)
-            axiosPublic.get( "/loginverifications"  ,formData)
+            axiosPublic.post( "/loginverifications", formData)
+            .then(res=>{
+                console.log(res.data)
+            })
         }else{
             const formData = {
                 email,
                 pin
             }
             console.log(formData)
+            axiosPublic.post( "/loginverifications", formData)
+            .then(res=>{
+                console.log(res.data)
+            })
         }        
 
         
