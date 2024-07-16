@@ -1,7 +1,9 @@
 import { useForm } from "react-hook-form";
 import "./style.css"
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Registration = () => {
+  const axiosPublic = useAxiosPublic()
   const {
     register,
     handleSubmit,
@@ -9,12 +11,19 @@ const Registration = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data)
+    // console.log(data)
+    // const {email, mobile, name, pin}  = data;
+
+
     const formData = {
         ...data,
         status: "pending"
     }
-    console.log(formData)
+    axiosPublic.post('/registration', formData)
+    .then(res =>{
+      console.log(res.data)
+    })
+
   };
 
   return (
