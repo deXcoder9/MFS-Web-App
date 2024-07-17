@@ -125,7 +125,30 @@ async function run() {
       };
       const result = await userInfo.updateOne(filter, updateDoc);
       res.send(result);
+    })
 
+    app.patch("/updatereceiverbalance", async (req, res) => {
+      const data = req.body
+      const sentMoney = data.money;
+      console.log("data from forntend", data)
+      const filter = { mobile: data.user };
+      const targetedUser = await userInfo.findOne(filter);
+      if(!targetedUser){
+        return res.send({ message: 'User not found' });
+      }
+      
+      // PIN HASHING!!  
+
+      const targetedUserBalance = targetedUser.balance;
+      console.log("targetedUserBalance",targetedUserBalance)
+      console.log('sentMoney', sentMoney)
+      const totalMoney = targetedUserBalance + sentMoney
+      // console.log("totalMoney", totalMoney)
+      const updateDoc = {
+        $set: { balance: totalMoney },
+      };
+      const result = await userInfo.updateOne(filter, updateDoc);
+      res.send(result);
     })
 
 

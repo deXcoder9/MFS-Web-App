@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import useUserInfo from "../../../hooks/useUserInfo";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -26,8 +26,8 @@ const SendMoney = () => {
 
     if(sendMoney >= 100){
       // todo: main balance diya 5 taka kaita nite hobe
-      let currentBalance = balance - sendMoney;
-      console.log('current balance', currentBalance)
+      let currentBalance = (balance - sendMoney) - 5 ;
+      // console.log('current balance', currentBalance)
 
       // todo: current balance ta set krte hobe main user er balance e 
      axiosSecure.patch(`/updatebalance/${currentUserId}`, {balance: currentBalance})
@@ -35,7 +35,10 @@ const SendMoney = () => {
 
 
       // todo: je number e pathano hoisa shei number a inputed MOney add korte hobe
+      axiosSecure.patch("/updatereceiverbalance", {money:sendMoney, user:data.mobile  })
+      .then(res => console.log("receiver balance updated successfully", res.data))
 
+      
 
     }
     if(sendMoney < 50 ){
