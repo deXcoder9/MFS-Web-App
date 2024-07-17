@@ -1,16 +1,53 @@
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import useUserInfo from "../../../hooks/useUserInfo";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const SendMoney = () => {
+  const axiosSecure = useAxiosSecure()
+  const [errorMessage, setErrorMessage]  = useState(null)
+  const [userDetails] = useUserInfo()
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  
 
   const onSubmit = (data) => {
-    const money =parseInt(data.money)
+    console.log("inputeddata", data )
+    const sendMoney =parseInt(data.money)
+    const balance = parseInt(userDetails.balance)
+    const currentUserId =userDetails._id 
+    // console.log(currentUserId)
+    // console.log(userDetails)
+    console.log('sendmoney', sendMoney)
+    console.log('balance', balance)
+
+    if(sendMoney >= 100){
+      // todo: main balance diya 5 taka kaita nite hobe
+      let currentBalance = balance - sendMoney;
+      console.log('current balance', currentBalance)
+
+      // todo: current balance ta set krte hobe main user er balance e 
+     axiosSecure.patch(`/updatebalance/${currentUserId}`, {balance: currentBalance})
+     .then(res => console.log("current balance updated successfully", res.data))
+
+
+      // todo: je number e pathano hoisa shei number a inputed MOney add korte hobe
+
+
+    }
+    if(sendMoney < 50 ){
+      // todo: sendMoney kora jabe nah!!
+      return setErrorMessage('Amount must be at least 50 or higher')
+    }
+    if( sendMoney >=50 ){
+      // todo: taile tumi send sendMoney krte prba
+      
+    }
     
-    console.log( money)
+
 };
 
   return (
@@ -48,6 +85,7 @@ const SendMoney = () => {
         {errors.pin && (
           <span className="text-xs text-red-500">This field is required</span>
         )}
+        {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
         <input className="btn " type="submit" />
       </form>
     </div>

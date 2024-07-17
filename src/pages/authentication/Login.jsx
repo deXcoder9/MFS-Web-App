@@ -26,7 +26,18 @@ const Login = () => {
             // console.log(formData)
             axiosPublic.post( "/loginverifications", formData)
             .then(res=>{
-                console.log(res.data)
+                if(res.data.message === 'User logged in successfully'){
+                    toast.success('User logged in successfully')
+                    localStorage.setItem('user', mobile)
+                    setTimeout( ()=>{
+                        navigate('/')
+                    }, 1300)
+                    
+                }else if(res.data.message === 'User not found'){
+                    toast.error('User not found')
+                }else if(res.data.message === 'Invalid PIN'){
+                    toast.error("Invalid Pin")
+                }
             })
         }else{
             const formData = {

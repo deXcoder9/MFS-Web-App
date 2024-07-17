@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const express = require('express')
 const app = express()
 const cors = require('cors');
@@ -81,11 +81,52 @@ async function run() {
     app.post('/userinfo', async(req, res) => {
       const userDetails =  req.body;
       // console.log("form frontend", userDetails)
-      const query = {email: userDetails.user}
-      const result = await userInfo.findOne(query)
-      res.send(result)
+      if(userDetails.user > 11){
+        // console.log("email")
+        const query = {mobile: userDetails.user}
+        const result = await userInfo.findOne(query)
+        res.send(result)
+      }else{
+        // console.log("number")
+        const query = {email: userDetails.user}
+        const result = await userInfo.findOne(query)
+        res.send(result)
+      }
     })
 
+    // admin > all users 
+    app.patch("/blockuser/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: { status: "block" },
+      };
+      const result = await userInfo.updateOne(filter, updateDoc);
+      res.send(result);
+    });
+    app.patch("/unblockuser/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: { status: "active" },
+      };
+      const result = await userInfo.updateOne(filter, updateDoc);
+      res.send(result);
+    });
+
+    // User > Send Money
+    app.patch('/updatebalance/:id', async (req, res) => {
+      const id = req.params.id;
+      const data = req.body
+      console.log(id, data)
+      const filter = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: { balance: data.balance },
+      };
+      const result = await userInfo.updateOne(filter, updateDoc);
+      res.send(result);
+
+    })
 
 
 

@@ -1,19 +1,26 @@
+import { Link, useNavigate } from "react-router-dom";
 import useUserInfo from "../../hooks/useUserInfo";
+import toast, { Toaster } from 'react-hot-toast';
 
 const Navbar = () => {
 
   const [userDetails] = useUserInfo()
+  const navigate = useNavigate()
 
   const handleLogout = () =>{
     localStorage.removeItem('user')
     console.log(userDetails)
+    toast.success("Logout successful")
+    setTimeout( () => {
+      navigate('/login')
+    }, 1300)
   }
 
 
   return (
     <div className="navbar bg-slate-700 ">
       <div className="flex-1">
-        <a className="">Ghost</a>
+       <Link to="/">GHOST</Link>
       </div>
       <div className="flex-none">
         <div className="dropdown dropdown-end">
@@ -74,7 +81,13 @@ const Navbar = () => {
             <li onClick={handleLogout}>
               <a>Logout</a>
             </li>
+           {
+            userDetails.role === 'admin' && <Link to="/allusers" > <li>
+            All Users
+          </li></Link>
+           }
           </ul>
+          <Toaster />
         </div>
       </div>
     </div>
