@@ -34,13 +34,17 @@ async function run() {
     // registration 
     app.post('/registration', async(req, res) => {
       const { name, pin, mobile, email } = req.body;
-      const userExists = await userInfo.findOne({ email });
-      if (userExists) {
-        return res.status(400).send({ message: 'User already exists' });
+      const userEmailExists = await userInfo.findOne({ email });
+      if (userEmailExists) {
+        return res.send({ message: 'User already exists' });
+      }
+      const userNumberExists = await userInfo.findOne({ mobile });
+      if (userNumberExists) {
+        return res.send({ message: 'User already exists' });
       }
       // password hashing
       const passwordHash = await bcrypt.hash(pin, 10);
-      console.log(passwordHash)
+      // console.log(passwordHash)
 
       await userInfo.insertOne({ name, pin: passwordHash, mobile, email });
       res.send({ message: 'User registered successfully' });
@@ -57,7 +61,7 @@ async function run() {
         user = await userInfo.findOne({ mobile });
       }
       
-      console.log(user)
+      // console.log(user)
       if (!user) {
         return res.send({ message: 'User not found' });
       }
@@ -72,6 +76,22 @@ async function run() {
       const users = await userInfo.find().toArray();
       res.send(users);
     })
+
+    // user related api
+    app.post('/userinfo', async(req, res) => {
+      const userDetails =  req.body;
+      // console.log("form frontend", userDetails)
+      const query = {email: userDetails.user}
+      const result = await userInfo.findOne(query)
+      res.send(result)
+    })
+
+
+
+
+
+
+
 
     
     // Connect the client to the server	(optional starting in v4.7)

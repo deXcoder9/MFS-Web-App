@@ -1,4 +1,15 @@
+import useUserInfo from "../../hooks/useUserInfo";
+
 const Navbar = () => {
+
+  const [userDetails] = useUserInfo()
+
+  const handleLogout = () =>{
+    localStorage.removeItem('user')
+    console.log(userDetails)
+  }
+
+
   return (
     <div className="navbar bg-slate-700 ">
       <div className="flex-1">
@@ -58,13 +69,9 @@ const Navbar = () => {
             <li>
               <a className="justify-between">
                 Profile
-                <span className="badge">New</span>
               </a>
             </li>
-            <li>
-              <a>Settings</a>
-            </li>
-            <li>
+            <li onClick={handleLogout}>
               <a>Logout</a>
             </li>
           </ul>

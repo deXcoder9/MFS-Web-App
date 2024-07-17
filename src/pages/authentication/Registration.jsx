@@ -11,14 +11,14 @@ const Registration = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    // console.log(data)
     // const {email, mobile, name, pin}  = data;
-
-
+    
+    
     const formData = {
-        ...data,
-        status: "pending"
+      ...data,
+      status: "pending"
     }
+      // console.log(formData)
     axiosPublic.post('/registration', formData)
     .then(res =>{
       console.log(res.data)
